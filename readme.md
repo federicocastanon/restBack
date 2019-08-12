@@ -1,4 +1,4 @@
-##*Codding assessment by **Federico González Castañón***
+## *Codding assessment by **Federico González Castañón***
 
 This project was made using spring boot, JAVA 8 and Eclipse IDE. In order to use it first cd to project folder, then run 
 
@@ -11,7 +11,7 @@ And that should leave the project up and running and ready to test.
 
 The code defines 13 Tests on class RestBackApplicationTests to be run with jUnit 
 
-#Detailed process
+# Detailed process
 
 After reading the assignment I made a few decisions regarding the architecture of my solution.
 
