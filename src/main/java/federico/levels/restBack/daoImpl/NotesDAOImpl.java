@@ -22,18 +22,16 @@ import federico.levels.restBack.domain.Note;
 @Repository
 public class NotesDAOImpl implements NotesDAO{
 
-		@Autowired
-		JdbcTemplate jdbcTemplate;
-		
-		private String INSERT_MESSAGE_SQL 
-		  = "insert into notes (body) values(?)";
+	@Autowired
+	JdbcTemplate jdbcTemplate;
 	
+	private String INSERT_MESSAGE_SQL 
+	  = "insert into notes (body) values(?)";	
 	
 	@Override
 	public Note isAliveAndWell() {
 		return getNoteById(Long.valueOf(1));
 	}
-
 
 	@Override
 	public Note getNoteById(Long id) {
@@ -41,10 +39,8 @@ public class NotesDAOImpl implements NotesDAO{
 				new BeanPropertyRowMapper<Note>(Note.class));
 	}
 
-
 	@Override
 	public Note saveNote(Note newNote) {
-		//returning the same object with new ID
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(connection -> {
 	        PreparedStatement ps = connection
@@ -53,9 +49,9 @@ public class NotesDAOImpl implements NotesDAO{
 	                return ps;
 	              }, keyHolder); 
 		newNote.setId(keyHolder.getKey().longValue());
+		//returning same object with new ID
 		return newNote;
 	}
-
 
 	@Override
 	public int deleteNote(Long id) {
@@ -82,7 +78,6 @@ public class NotesDAOImpl implements NotesDAO{
 					new NoteRowMapper());
 		}		
 	}
-
 
 	@Override
 	public int updateNote(Note note) {

@@ -7,22 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import federico.levels.restBack.domain.Note;
-import io.restassured.RestAssured;
-import io.restassured.config.RestAssuredConfig;
-import io.restassured.http.ContentType;
-
 import static io.restassured.RestAssured.*;
-import static io.restassured.matcher.RestAssuredMatchers.*;
 import static org.hamcrest.Matchers.*;
-
 import static org.junit.Assert.*;
-
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -145,6 +135,71 @@ public class RestBackApplicationTests {
 	    delete(CONTEXT_PATH + "/2").
 	    then().
 	    body("errorCode",equalTo(1));
+	}
+	
+	@Test
+	public void insertNewNoteLargeBody(){
+		String newBody = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
+		Map<String, String>  jsonAsMap = new HashMap<String, String>();
+		jsonAsMap.put("body", newBody );
+		
+		given().
+	       contentType("application/json").
+	       body(jsonAsMap).
+	    when().
+	        post(CONTEXT_PATH + "/").
+	    then().
+        assertThat()
+        .statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+	
+	@Test
+	public void insertNewNoteNullBody(){
+		
+		Map<String, String>  jsonAsMap = new HashMap<String, String>();
+		jsonAsMap.put("body", null );
+		
+		given().
+	       contentType("application/json").
+	       body(jsonAsMap).
+	    when().
+	        post(CONTEXT_PATH + "/").
+	    then().
+        assertThat()
+        .statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+	
+	@Test
+	public void editNoteLargeBody(){
+		String newBody = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
+		Map<String, String>  jsonAsMap = new HashMap<String, String>();
+		jsonAsMap.put("body", newBody );
+		jsonAsMap.put("id", "1" );
+		
+		given().
+	       contentType("application/json").
+	       body(jsonAsMap).
+	    when().
+	        put(CONTEXT_PATH + '/').
+	    then().
+        assertThat()
+        .statusCode(HttpStatus.BAD_REQUEST.value());
+	}
+	
+	@Test
+	public void editNoteNullBody(){
+		Map<String, String>  jsonAsMap = new HashMap<String, String>();
+		jsonAsMap.put("body", null );
+		jsonAsMap.put("id", "1" );
+		
+		given().
+	       contentType("application/json").
+	       body(jsonAsMap).
+	    when().
+	        put(CONTEXT_PATH + '/').
+	    then().
+        assertThat()
+        .statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
 	
